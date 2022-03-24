@@ -37,3 +37,44 @@ model Logistic {
 
   @@map("logistics")
 }
+
+model Book {
+  id String @id @default(uuid())
+  code String @db.Char(30)
+  title String @db.VarChar(200)
+  author String? @db.VarChar(100)
+  stock Int
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members BookMember[]
+
+  @@map("books")
+}
+
+model Member {
+  id String @id @default(uuid())
+  code String @db.Char(30)
+  name String @db.VarChar(200)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  books BookMember[]
+
+  @@map("members")
+}
+
+model BookMember {
+  bookId String
+  book Book @relation(fields: [bookId], references: [id])
+
+  memberId String
+  member Member @relation(fields: [memberId], references: [id])
+
+  createdAt DateTime
+
+  @@id([bookId, memberId])
+  @@map("book_member")
+}
