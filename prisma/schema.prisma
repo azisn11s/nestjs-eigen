@@ -57,6 +57,7 @@ model Member {
   id String @id @default(uuid())
   code String @db.Char(30)
   name String @db.VarChar(200)
+  isOnPenalty Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -74,6 +75,7 @@ model BookMember {
   member Member @relation(fields: [memberId], references: [id])
 
   createdAt DateTime
+  // returnedAt DateTime?
 
   @@id([bookId, memberId])
   @@map("book_member")

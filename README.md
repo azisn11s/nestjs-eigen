@@ -41,7 +41,7 @@ $ npx prisma db seed
 ### I attached auth capabilities on this project. So, you need to login at first to try the other API's.
 ```bash
 endpoint `auth/signin`
-msisdn : 6285794313256
+msisdn : 6285794313257
 password :  password
 ```
 ## License
