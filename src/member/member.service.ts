@@ -55,7 +55,13 @@ export class MemberService {
           books: true,
         },
       });
-    console.log('MEMBER', member);
+    // console.log('MEMBER', member);
+
+    if (!member) {
+      throw new NotFoundException(
+        'Member not found!',
+      );
+    }
 
     if (member.isOnPenalty) {
       throw new ForbiddenException(
@@ -79,11 +85,18 @@ export class MemberService {
         },
       });
 
+    if (!book) {
+      throw new NotFoundException(
+        'Book not found!',
+      );
+    }
+
     if (book.stock - book.members.length < 1) {
       throw new ForbiddenException(
         'This book is out of stock.',
       );
     }
+
     try {
       return await this.prismaService.member.update(
         {
@@ -141,7 +154,13 @@ export class MemberService {
           },
         },
       });
-    console.log('MEMBER', member);
+    // console.log('MEMBER', member);
+
+    if (!member) {
+      throw new NotFoundException(
+        'Book not found.',
+      );
+    }
 
     const book =
       await this.prismaService.book.findFirst({
@@ -187,7 +206,7 @@ export class MemberService {
     if (diffDays > 7) {
       isOnPenalty = true;
     }
-    console.log('DIFF', diffDays);
+    // console.log('DIFF', diffDays);
 
     try {
       // just update returnedAt
@@ -199,6 +218,18 @@ export class MemberService {
           isOnPenalty: isOnPenalty,
         },
       });
+
+      // direct delete many to many
+      return await this.prismaService.bookMember.delete(
+        {
+          where: {
+            bookId_memberId: {
+              bookId: book.id,
+              memberId: member.id,
+            },
+          },
+        },
+      );
       // return await this.prismaService.member.update(
       //   {
       //     where: {
@@ -233,18 +264,6 @@ export class MemberService {
       //     },
       //   },
       // );
-
-      // direct delete many to many
-      return await this.prismaService.bookMember.delete(
-        {
-          where: {
-            bookId_memberId: {
-              bookId: book.id,
-              memberId: member.id,
-            },
-          },
-        },
-      );
     } catch (error) {
       if (
         error instanceof

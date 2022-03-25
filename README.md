@@ -44,6 +44,11 @@ endpoint `auth/signin`
 msisdn : 6285794313257
 password :  password
 ```
+
+## Swagger Docs
+```bash 
+https://app.swaggerhub.com/apis/azisn11s/Eigen/1.0.0
+```
 ## License
 
 Nest is [MIT licensed](LICENSE).

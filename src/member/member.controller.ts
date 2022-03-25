@@ -3,10 +3,13 @@ import {
   Get,
   Post,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { JwtGuard } from 'src/auth/guard';
 import { MemberService } from './member.service';
 
+@UseGuards(JwtGuard)
 @Controller('members')
 export class MemberController {
   constructor(
@@ -24,7 +27,7 @@ export class MemberController {
   @Post('/:memberId/borrow')
   borrow(@Req() request: Request) {
     const memberId = request.params.memberId;
-    console.log('ID', memberId);
+    // console.log('ID', memberId);
 
     return this.memberService.borrowBook(
       memberId,
@@ -34,7 +37,7 @@ export class MemberController {
   @Post('/:memberId/return')
   return(@Req() request: Request) {
     const memberId = request.params.memberId;
-    console.log('ID', memberId);
+    // console.log('ID', memberId);
 
     return this.memberService.returnBook(
       memberId,
