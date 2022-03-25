@@ -17,11 +17,7 @@ export class BookService {
       await this.prismaService.book.findMany({
         where: filter,
         include: {
-          members: {
-            where: {
-              returnedAt: null,
-            },
-          },
+          members: true,
         },
       });
     return books.map((item) => {

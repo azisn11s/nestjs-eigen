@@ -22,7 +22,7 @@ export class MemberService {
         include: {
           books: {
             where: {
-              returnedAt: null,
+              // returnedAt: null,
             },
             select: {
               book: true,
@@ -52,11 +52,7 @@ export class MemberService {
           id: memberId,
         },
         include: {
-          books: {
-            where: {
-              returnedAt: null,
-            },
-          },
+          books: true,
         },
       });
     console.log('MEMBER', member);
@@ -79,11 +75,7 @@ export class MemberService {
           id: bookId,
         },
         include: {
-          members: {
-            where: {
-              returnedAt: null,
-            },
-          },
+          members: true,
         },
       });
 
@@ -145,7 +137,6 @@ export class MemberService {
           books: {
             where: {
               bookId: bookId,
-              returnedAt: null,
             },
           },
         },
@@ -158,11 +149,7 @@ export class MemberService {
           id: bookId,
         },
         include: {
-          members: {
-            where: {
-              returnedAt: null,
-            },
-          },
+          members: true,
         },
       });
 
@@ -178,7 +165,7 @@ export class MemberService {
       );
     }
     let isOnPenalty = false;
-    let returnDate = new Date();
+    const returnDate = new Date();
     const borrowedBook =
       await this.prismaService.bookMember.findFirst(
         {
@@ -188,9 +175,30 @@ export class MemberService {
           },
         },
       );
+    const borrowDate = new Date(
+      borrowedBook.createdAt,
+    );
+    const difference =
+      returnDate.getTime() - borrowDate.getTime();
+    const diffDays = Math.ceil(
+      difference / (1000 * 3600 * 24),
+    );
+
+    if (diffDays > 7) {
+      isOnPenalty = true;
+    }
+    console.log('DIFF', diffDays);
 
     try {
       // just update returnedAt
+      await this.prismaService.member.update({
+        where: {
+          id: memberId,
+        },
+        data: {
+          isOnPenalty: isOnPenalty,
+        },
+      });
       // return await this.prismaService.member.update(
       //   {
       //     where: {
@@ -204,9 +212,17 @@ export class MemberService {
       //               bookId: book.id,
       //               memberId: member.id,
       //             },
+      //            returnedAt: new Date(),
       //           },
-      //           data: {
-      //             returnedAt: new Date(),
+      //         },
+      //       },
+      //     },
+      //     select: {
+      //       name: true,
+      //       books: true,
+      //     },
+      //   },
+      // );             returnedAt: new Date(),
       //           },
       //         },
       //       },
