@@ -37,6 +37,48 @@ function getLongWord(sentence: string) {
   return longestWord;
 }
 
+function queryCounter(
+  input: string[],
+  query: string[],
+) {
+  const resultNumbers: number[] = [];
+  query.forEach((item, idx) => {
+    resultNumbers[idx] = 0;
+
+    input.forEach((inp) => {
+      if (item == inp) {
+        resultNumbers[idx] += 1;
+      }
+    });
+  });
+  return resultNumbers;
+}
+
+function substractDiagonalValues(
+  matrixInput: number[][],
+) {
+  const diag1 = matrixInput
+    .map((item, idx) => {
+      return item[idx];
+    })
+    .reduce(
+      (diag1, current) => diag1 + current,
+      0,
+    );
+
+  const diag2 = matrixInput
+    .map((item, idx) => {
+      const itemLength = item.length;
+      return item[itemLength - 1 - idx];
+    })
+    .reduce(
+      (diag2, current) => diag2 + current,
+      0,
+    );
+
+  return diag1 - diag2;
+}
+
 console.log(
   'No. 1 - REVERSE WORD = ',
   reverseWordsOnly('NEIGE1'),
@@ -47,4 +89,21 @@ console.log(
   getLongWord(
     'Saya sangat senang mengerjakan soal algoritma',
   ),
+);
+
+console.log(
+  'No. 3 - Count occurences = ',
+  queryCounter(
+    ['xc', 'dz', 'bbb', 'dz'],
+    ['bbb', 'ac', 'dz'],
+  ),
+);
+
+console.log(
+  'No. 4 - Substract from two diagonals = ',
+  substractDiagonalValues([
+    [1, 2, 0],
+    [4, 5, 6],
+    [7, 8, 9],
+  ]),
 );

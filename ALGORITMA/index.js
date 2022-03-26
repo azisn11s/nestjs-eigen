@@ -28,5 +28,37 @@ function getLongWord(sentence) {
     });
     return longestWord;
 }
-console.log('No. 1 - REVERSE WORD', reverseWordsOnly('NEIGE1'));
-console.log('No. 2 - GET LONGEST WORD ON A SENTENCE', getLongWord('Saya sangat senang mengerjakan soal algoritma'));
+function queryCounter(input, query) {
+    var resultNumbers = [];
+    query.forEach(function (item, idx) {
+        resultNumbers[idx] = 0;
+        input.forEach(function (inp) {
+            if (item == inp) {
+                resultNumbers[idx] += 1;
+            }
+        });
+    });
+    return resultNumbers;
+}
+function substractDiagonalValues(matrixInput) {
+    var diag1 = matrixInput
+        .map(function (item, idx) {
+        return item[idx];
+    })
+        .reduce(function (diag1, current) { return diag1 + current; }, 0);
+    var diag2 = matrixInput
+        .map(function (item, idx) {
+        var itemLength = item.length;
+        return item[itemLength - 1 - idx];
+    })
+        .reduce(function (diag2, current) { return diag2 + current; }, 0);
+    return diag1 - diag2;
+}
+console.log('No. 1 - REVERSE WORD = ', reverseWordsOnly('NEIGE1'));
+console.log('No. 2 - GET LONGEST WORD ON A SENTENCE = ', getLongWord('Saya sangat senang mengerjakan soal algoritma'));
+console.log('No. 3 - Count occurences = ', queryCounter(['xc', 'dz', 'bbb', 'dz'], ['bbb', 'ac', 'dz']));
+console.log('No. 4 - Substract from two diagonals = ', substractDiagonalValues([
+    [1, 2, 0],
+    [4, 5, 6],
+    [7, 8, 9],
+]));
